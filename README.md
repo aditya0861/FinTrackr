@@ -140,3 +140,7 @@ src/
 - ✅ Dark mode (with system detection + manual toggle)
 - ✅ Data persistence (LocalStorage)
 - ✅ Animations and transitions (Framer Motion)
+
+
+## live demo
+https://fin-trackr-git-main-aditya0861s-projects.vercel.app/
