@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Transaction, Role } from "@/types";
+import { Transaction, TransactionType, Role } from "@/types";
 import { mockTransactions } from "@/data/mockTransactions";
 
 interface FinanceContextType {
@@ -15,6 +15,13 @@ interface FinanceContextType {
 
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
 
+function normalizeTransaction(t: Transaction): Transaction {
+  return {
+    ...t,
+    type: t.type.toLowerCase() as TransactionType,
+  };
+}
+
 export function FinanceProvider({ children }: { children: React.ReactNode }) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [role, setRole] = useState<Role>("admin");
@@ -25,7 +32,8 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
     const storedRole = localStorage.getItem("finance-role");
 
     if (storedTransactions) {
-      setTransactions(JSON.parse(storedTransactions));
+      const parsed: Transaction[] = JSON.parse(storedTransactions);
+      setTransactions(parsed.map(normalizeTransaction));
     } else {
       setTransactions(mockTransactions);
     }
@@ -45,7 +53,7 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
   }, [transactions, role, isLoaded]);
 
   const addTransaction = (transaction: Transaction) => {
-    setTransactions((prev) => [transaction, ...prev]);
+    setTransactions((prev) => [normalizeTransaction(transaction), ...prev]);
   };
 
   const deleteTransaction = (id: string) => {
@@ -53,8 +61,9 @@ export function FinanceProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateTransaction = (updatedTransaction: Transaction) => {
+    const normalized = normalizeTransaction(updatedTransaction);
     setTransactions((prev) =>
-      prev.map((t) => (t.id === updatedTransaction.id ? updatedTransaction : t))
+      prev.map((t) => (t.id === normalized.id ? normalized : t))
     );
   };
 

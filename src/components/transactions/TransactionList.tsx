@@ -21,7 +21,7 @@ export function TransactionList() {
 
   const filteredTransactions = transactions.filter((t) => {
     const matchesSearch = t.category.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = filterType === "all" || t.type === filterType;
+    const matchesType = filterType === "all" || t.type.toLowerCase() === filterType;
     return matchesSearch && matchesType;
   }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
