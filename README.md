@@ -143,4 +143,4 @@ src/
 
 
 ## live demo
-https://fin-trackr-git-main-aditya0861s-projects.vercel.app/
+https://fin-trackr-alpha.vercel.app/
